@@ -20,7 +20,7 @@ func CreateProduct (c *gin.Context){
 		return
 	}
 
-	newProduct := product ProdcuProduct
+	newProduct := product; newProduct
 	{
 		Name:  product.Name,
 		Price: product.Price,

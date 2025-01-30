@@ -1,17 +1,19 @@
 package infraestructure
 
 import (
+	"database/sql"
 	"fmt"
 	"introduccion_go/src/Core"
+	"introduccion_go/src/products/domain"
 	"log"
 )
 
 type MySQL struct {
-	conn *core.ConnectToDB
+	conn *core.Conn_MySQL
 }
 
 func NewMySQL() *MySQL {
-	conn := core.ConnectToDB()
+	conn := core.GetDBPool()
 	if conn.Err != "" {
 		log.Fatalf("Error al configurar el pool de conexiones: %v", conn.Err)
 	}
@@ -19,20 +21,16 @@ func NewMySQL() *MySQL {
 	return &MySQL{conn: conn}
 }
 
-func (mysql *MySQL) Save() {
+func (mysql *MySQL) Save(product domain.Product) error {
 	query := "INSERT INTO product (name, price) VALUES (?, ?)"
-	name := "Big-cola"
-	price := 12.50
-
-	result, err := mysql.conn.ExecutePreparedQuery(query, name, price)
+	_, err := mysql.
+	
 	if err != nil {
-		log.Fatalf("Error al ejecutar la consulta: %v", err)
+		return err
 	}
 
-	rowsAffected, _ := result.RowsAffected()
-	if rowsAffected == 1 {
-		log.Printf("[MySQL] - Filas afectadas: %d", rowsAffected)
-	}
+	fmt.Println("Producto creado")
+	return nil
 }
 
 func (mysql *MySQL) GetAll() {

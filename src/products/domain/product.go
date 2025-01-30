@@ -1,30 +1,39 @@
 package domain //nombre de la carpeta en la cual se encuentra el archivo
 
 type Product struct {
-	id int32
-	name string
-	price float32
+	Id int32
+	Name string
+	Price float32
 }
 
 //interfaces para plantilla, clases para modelos de negocio :)
 //visualizar como si fuera un constructor
-func NewProduct(name string, price float32) *Product { //mayúscula para public y minúscula para private
+func NewProduct(Name string, Price float32) *Product { //mayúscula para public y minúscula para private
 	//return &Product{id: 1, name: name, price: price}
-	return &Product{name: name, price: price}
+	return &Product{Id: 1, Name: Name, Price: Price}
+}
+
+//getters and setters 
+func (p *Product) GetId() int32 {
+	return p.Id
+}
+
+func (p *Product) SetId(Id int32) {
+	p.Id = Id
 }
 
 func (p *Product) GetName() string {
-	return p.name
+	return p.Name
 }
 
 func (p *Product) SetName(name string){
-	p.name = name
+	p.Name = name
 }
 
 func (p *Product) GetPrice() float32{
-	return p.price
+	return p.Price
 }
 
 func (p *Product) SetPrice (price float32) {
-	p.price = price
+	p.Price = price
 }

@@ -19,12 +19,14 @@ func NewGetAllProductController () *GetAllProductController{
 }
 
 func (ctrl *GetAllProductController) Run (c *gin.Context) {
-	products := ctrl.app.Run()
+	res := ctrl.app.Run()
 
-	if products == nil {
-		c.JSON(http.StatusNotFound, gin.H{"status": false, "error": "estas mal"})
+	if len(res) == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"status": false, "error": "No se encontró ningún producto"})
 		return
+	} else {
+		c.JSON(http.StatusOK, gin.H{"products": res})
 	}
 
-	c.JSON(http.StatusOK, gin.H{"products": products})
+	
 }

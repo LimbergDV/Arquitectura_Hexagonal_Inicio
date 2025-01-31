@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"introduccion_go/src/products/application"
 	infraestructure "introduccion_go/src/products/infrastucture"
 	"net/http"
@@ -27,16 +26,13 @@ func (ctrl *DeleteProductByIdController) Run(c *gin.Context)  {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "id de producto invalido"})
 		return
 	}
-	rowsAffected, err := ctrl.app.Run(productId)
+	rowsAffected, _ := ctrl.app.Run(productId)
 
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	if rowsAffected == 0 {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "No se pudo eliminar"})
 		return
 	}
 
-	if rowsAffected == 0 {
-		fmt.Print("hola")
-	}
 	// Devolviendo el mensaje y el id eliminado
 	c.JSON(http.StatusOK, gin.H{"message": "Producto eliminado exitosamente"})
 }

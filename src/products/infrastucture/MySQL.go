@@ -21,7 +21,7 @@ func NewMySQL() *MySQL {
 }
 
 func (mysql *MySQL) Save(product domain.Product) (uint, error) {
-	query := "INSERT INTO product (name, price) VALUES (?, ?)"
+	query := "INSERT INTO products (name, price) VALUES (?, ?)"
 	res, err := mysql.conn.ExecutePreparedQuery(query, product.Name, product.Price)
 
 	if err != nil {
@@ -36,9 +36,9 @@ func (mysql *MySQL) Save(product domain.Product) (uint, error) {
 }
 
 func (mysql *MySQL) GetAll() []domain.Product {
-	query := "SELECT * FROM product"
+	query := "SELECT * FROM products"
 
-	var products [] domain.Product
+	var products []domain.Product
 	rows := mysql.conn.FetchRows(query)
 
 	if rows == nil {
@@ -50,10 +50,13 @@ func (mysql *MySQL) GetAll() []domain.Product {
 
 	for rows.Next() {
 		var p domain.Product
-		if err := rows.Scan(&p.Id, p.Name, p.Price); err != nil {
+		// Asegúrate de pasar las direcciones de memoria de p.Name y p.Price
+		if err := rows.Scan(&p.Id, &p.Name, &p.Price); err != nil {
 			fmt.Println("error al escanear la fila: %w", err)
+		} else {
+			// Agregar el producto al slice
+			products = append(products, p)
 		}
-
 	}
 
 	if err := rows.Err(); err != nil {
@@ -61,9 +64,9 @@ func (mysql *MySQL) GetAll() []domain.Product {
 	}
 
 	fmt.Println("Lista de productos")
-
 	return products
 }
+
 
 func (mysql *MySQL) Delete(id int) (uint, error) {
 	query := "DELETE FROM products WHERE id = ? "
@@ -83,13 +86,16 @@ func (mysql *MySQL) Delete(id int) (uint, error) {
 func (mysql *MySQL) Update(id int, product domain.Product) (uint, error) {
 	query := "UPDATE products SET name = ?, price = ? WHERE id = ?"
 
-	res, err := mysql.conn.ExecutePreparedQuery(query, product.Name, product.Price)
-	
+	// Se pasa el 'id' como tercer parámetro en la consulta
+	res, err := mysql.conn.ExecutePreparedQuery(query, product.Name, product.Price, id)
+
 	if err != nil {
 		fmt.Println("Error al ejecutar la consulta: %v", err)
+		return 0, err
 	}
 
 	rows, _ := res.RowsAffected()
 
 	return uint(rows), nil
 }
+

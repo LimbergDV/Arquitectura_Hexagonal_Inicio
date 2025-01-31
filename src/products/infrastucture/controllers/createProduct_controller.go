@@ -26,12 +26,12 @@ func (ctrl *CreateProductController) Run(c *gin.Context){
 	var products domain.Product
 
 	if err := c.ShouldBindJSON(&products); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"status":false, "error": "Datos ivalidos" + err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"status":false, "error": "Datos invalidos " + err.Error()})
 		return 
 	}
 
 	if err := validators.CheckProduct(products); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H {"status": false, "error": "Datos ivalidos" + err.E})
+		c.JSON(http.StatusBadRequest, gin.H {"status": false, "error": "Datos invalidos " + err.Error()})
 	} 
 
 	rowsAffected, err := ctrl.app.Run(products)

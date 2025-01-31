@@ -1,9 +1,9 @@
 package domain //nombre de la carpeta en la cual se encuentra el archivo
 
 type Product struct {
-	Id int32
-	Name string
-	Price float32
+	Id int32 `json:"id,omitempty"` 
+	Name string `json:"name"`
+	Price float32 `json:"price"`
 }
 
 //interfaces para plantilla, clases para modelos de negocio :)

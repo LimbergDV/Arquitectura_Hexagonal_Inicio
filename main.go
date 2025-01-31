@@ -1,15 +1,16 @@
 package main
 
 import (
-	"introduccion_go/src/products/infrastucture/dependencies"
-	"introduccion_go/src/products/infrastucture/routes"
+	//alias para asignar a los recursos
+	products "introduccion_go/src/products/infrastucture"
+	routesProducts "introduccion_go/src/products/infrastucture/routes"
 
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	dependencies.Init()
+	products.GoMySQL()
 	r := gin.Default()
-	routes.Routes(r)
+	routesProducts.Routes(r)
 	r.Run()
 }

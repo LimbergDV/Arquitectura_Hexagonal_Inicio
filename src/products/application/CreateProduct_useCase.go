@@ -12,6 +12,6 @@ func NewCreateProduct (db domain.Iproduct) *CreateProduct{
 	return &CreateProduct{db:db}
 }
 
-func (cp *CreateProduct) Run (product domain.Product)  error{ //se puede usar Run ó Excute para CREAR objetos de un crud
+func (cp *CreateProduct) Run (product domain.Product)  (uint, error){ //se puede usar Run ó Excute para CREAR objetos de un crud
 	return cp.db.Save(product)
 }

@@ -2,25 +2,29 @@ package controllers
 
 import (
 	"introduccion_go/src/products/application"
+	infraestructure "introduccion_go/src/products/infrastucture"
 	"net/http"
-	
 
 	"github.com/gin-gonic/gin"
 )
 
 type GetAllProductController struct {
-	uc *application.GetAllProduct
+	app *application.GetAllProduct
 }
 
-func NewGetAllProductController (uc *application.GetAllProduct) *GetAllProductController{
-	return &GetAllProductController{uc: uc}
+func NewGetAllProductController () *GetAllProductController{
+	mysql := infraestructure.GetMySQL()
+	app := application.NewGetAllProduct(mysql)
+	return &GetAllProductController{app: app}
 }
 
 func (ctrl *GetAllProductController) Run (c *gin.Context) {
-	products, err := ctrl.uc.Run()
+	products := ctrl.app.Run()
 
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	if products == nil {
+		c.JSON(http.StatusNotFound, gin.H{"status": false, "error": "estas mal"})
+		return
 	}
+
 	c.JSON(http.StatusOK, gin.H{"products": products})
 }

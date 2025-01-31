@@ -1,8 +1,10 @@
 package controllers
 
 import (
+	"fmt"
 	"introduccion_go/src/products/application"
 	"introduccion_go/src/products/domain"
+	infraestructure "introduccion_go/src/products/infrastucture"
 	"net/http"
 	"strconv"
 
@@ -10,31 +12,42 @@ import (
 )
 
 type UpdateProductByIdController struct{
-	uc *application.UpdateProduct
+	app *application.UpdateProduct
 }
 
-func NewUpdateProductByIdController(uc *application.UpdateProduct) *UpdateProductByIdController{
-	return &UpdateProductByIdController{uc: uc}
+func NewUpdateProductByIdController() *UpdateProductByIdController{
+	mysql := infraestructure.GetMySQL()
+	app := application.NewUpdateProduct(mysql)
+	return &UpdateProductByIdController{app: app}
 }
 
 func (ctrl *UpdateProductByIdController) Run(c *gin.Context){
+	id := c.Param("id")
 	var product domain.Product
+
+	id_product, _ := strconv.ParseUint(id, 10, 64)
 
 	if err :=  c.ShouldBindJSON(&product); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	id := c.Param("id")
+	
 	idInt, err := strconv.Atoi(id)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid product ID"})
 		return
 	}
 	
-	if err := ctrl.uc.Run(idInt, product); err != nil {
+	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
+	}
+
+	RowsAffected, _ := ctrl.app.Run(int(id_product), product)
+
+	if RowsAffected == 0{
+		fmt.Print("hola")
 	}
 
 	// Send a successful response

@@ -1,7 +1,9 @@
 package controllers
 
 import (
+	"fmt"
 	"introduccion_go/src/products/application"
+	infraestructure "introduccion_go/src/products/infrastucture"
 	"net/http"
 	"strconv"
 
@@ -9,11 +11,13 @@ import (
 )
 
 type DeleteProductByIdController struct{
-	uc *application.DeleteProduct
+	app *application.DeleteProduct
 }
 
-func NewDeleteProductByIdController (uc *application.DeleteProduct) *DeleteProductByIdController {
-	return &DeleteProductByIdController{uc: uc}
+func NewDeleteProductByIdController() *DeleteProductByIdController {
+	mysql := infraestructure.GetMySQL()
+	app := application.NewDeleteProduct(mysql)
+	return &DeleteProductByIdController{app: app}
 }
 
 func (ctrl *DeleteProductByIdController) Run(c *gin.Context)  {
@@ -23,12 +27,16 @@ func (ctrl *DeleteProductByIdController) Run(c *gin.Context)  {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "id de producto invalido"})
 		return
 	}
-	err = ctrl.uc.Run(productId)
+	rowsAffected, err := ctrl.app.Run(productId)
+
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
+	if rowsAffected == 0 {
+		fmt.Print("hola")
+	}
 	// Devolviendo el mensaje y el id eliminado
 	c.JSON(http.StatusOK, gin.H{"message": "Producto eliminado exitosamente"})
 }

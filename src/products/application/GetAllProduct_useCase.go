@@ -10,7 +10,7 @@ func NewGetAllProduct(db domain.Iproduct) *GetAllProduct  {
 	return &GetAllProduct{db: db}
 }
 
-func (lp *GetAllProduct) Run() ([]domain.Product, error){
+func (lp *GetAllProduct) Run() []domain.Product{
 	return lp.db.GetAll()
 }
 

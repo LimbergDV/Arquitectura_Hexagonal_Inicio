@@ -10,6 +10,6 @@ func NewDeleteProduct(db domain.Iproduct) *DeleteProduct{
 	return &DeleteProduct{db: db}
 }
 
-func (dp *DeleteProduct ) Run(id int) (uint64, error){
+func (dp *DeleteProduct ) Run(id int) error{
 	return dp.db.Delete(id)
 }

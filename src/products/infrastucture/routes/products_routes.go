@@ -1,14 +1,25 @@
 package routes
 
 import (
-	"introduccion_go/src/products/infrastucture/controllers"
+	"introduccion_go/src/products/infrastucture/dependencies"
 
 	"github.com/gin-gonic/gin"
 )
 
-func routes (r *gin.Engine){
+func Routes (r *gin.Engine){
+
 	productsRoutes := r.Group("/products")
-	{
-		productsRoutes.POST("/add", controllers.CreateProduct)
-	}
+	
+
+	createProduct := dependencies.CreateProductController()
+	getAllProduct := dependencies.GetAllProductsController()
+	updateProduct := dependencies.UpdateProductsController()
+	deleteProduct := dependencies.DeleteProductsController()
+	
+
+	productsRoutes.POST("/add", createProduct.Run)
+	productsRoutes.GET("/", getAllProduct.Run)
+	productsRoutes.PUT("/update/:id", updateProduct.Run)
+	productsRoutes.DELETE("/delete/id", deleteProduct.Run)
+
 }

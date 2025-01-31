@@ -1,45 +1,39 @@
 package controllers
 
 import (
+	"introduccion_go/src/products/application"
+	"introduccion_go/src/products/domain"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
-func CreateProduct (c *gin.Context){
-	var Product struct{
-		Name string `json: name`
-		Price string `json: price`
+type CreateProductController struct {
+	uc *application.CreateProduct
+}
+
+//Este constructor permite inyectar la dependencia del caso del uso (application.CreateProduct) al controlador.
+func NewCreateProductController (uc *application.CreateProduct) *CreateProductController {
+	return &CreateProductController{uc: uc}
+}
+
+func (ctrl *CreateProductController) Run(c *gin.Context){
+	var products domain.Product
+
+	if err := c.ShouldBindJSON(&products); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "todos los campos tienen que ser requeridos"})
+		return 
 	}
 
-	if err := c.ShouldBindJSON(&product); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"status": "false",
-			"error": "Error 400, datos invalidos",
-		})
-		return
-	}
-
-	newProduct := product; newProduct
-	{
-		Name:  product.Name,
-		Price: product.Price,
-	}
+	 err := ctrl.uc.Run(products) 
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"status": "false",
-			"error":  "Error 500, no se puedo guardar el producto: " + err.Error(),
-		})
-		return
+	c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	return
+	} else {
+		c.JSON(http.StatusCreated, gin.H {"mensaje": "Producto creado"})
+		c.JSON(http.StatusOK, products)
 	}
-
-	// Respuesta exitosa
-	c.JSON(http.StatusCreated, gin.H{
-		"status":  "true",
-		"message": "Producto creado exitosamente",
-		"product": newProduct,
-	})
 }
 
 

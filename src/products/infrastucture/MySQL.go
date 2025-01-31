@@ -3,27 +3,20 @@ package infraestructure
 import (
 	"database/sql"
 	"fmt"
-	"introduccion_go/src/Core"
 	"introduccion_go/src/products/domain"
-	"log"
 )
 
 type MySQL struct {
-	conn *core.Conn_MySQL
+	db *sql.DB
 }
 
-func NewMySQL() *MySQL {
-	conn := core.GetDBPool()
-	if conn.Err != "" {
-		log.Fatalf("Error al configurar el pool de conexiones: %v", conn.Err)
-	}
-
-	return &MySQL{conn: conn}
+func NewMySQL(db *sql.DB) *MySQL {
+	return &MySQL{db:db}
 }
 
 func (mysql *MySQL) Save(product domain.Product) error {
 	query := "INSERT INTO product (name, price) VALUES (?, ?)"
-	_, err := mysql.
+	_, err := mysql.db.Exec(query, product.GetName(), product.GetPrice())
 	
 	if err != nil {
 		return err
@@ -33,10 +26,17 @@ func (mysql *MySQL) Save(product domain.Product) error {
 	return nil
 }
 
-func (mysql *MySQL) GetAll() {
+func (mysql *MySQL) GetAll() ([]domain.Product, error){
 	query := "SELECT * FROM product"
-	rows := mysql.conn.FetchRows(query)
+	rows, err := mysql.db.Query(query)
+
+	if err != nil {
+		return nil, err
+	}
+
 	defer rows.Close()
+	var products []domain.Product
+
 	for rows.Next() {
 		var idproduct int
 		var name string
@@ -50,4 +50,22 @@ func (mysql *MySQL) GetAll() {
 	if err := rows.Err(); err != nil {
 		fmt.Println("error iterando sobre las filas: %w", err)
 	}
+
+	fmt.Println("Lista de productos")
+
+	return products, nil
+}
+
+func (mysql *MySQL) Delete(id int) error {
+	query := "DELETE FROM products WHERE id = ? "
+	_, err := mysql.db.Exec(query, id)
+	fmt.Println("PRODUCTO ELIMINADO")
+	return err
+}
+
+func (mysql *MySQL) Update(id int, product domain.Product) error {
+	query := "UPDATE products SET name = ?, price = ? WHERE id = ?"
+	_, err := mysql.db.Exec(query, product.GetName(), product.GetPrice(), id)
+	fmt.Println("PRODUCTO ACTUALIZADO")
+	return err
 }

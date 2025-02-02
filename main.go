@@ -2,7 +2,7 @@ package main
 
 import (
 	//alias para asignar a los recursos
-	products "introduccion_go/src/products/infrastucture"
+	products "introduccion_go/src/products/infrastructure"
 	routesProducts "introduccion_go/src/products/infrastucture/routes"
 
 	"github.com/gin-gonic/gin"

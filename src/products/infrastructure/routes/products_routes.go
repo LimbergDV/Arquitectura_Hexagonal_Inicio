@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"introduccion_go/src/products/infrastucture/controllers"
+	"introduccion_go/src/products/infrastructure/controllers"
 
 	"github.com/gin-gonic/gin"
 )

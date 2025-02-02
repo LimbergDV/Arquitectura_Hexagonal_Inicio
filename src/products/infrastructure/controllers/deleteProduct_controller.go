@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"introduccion_go/src/products/application"
-	infraestructure "introduccion_go/src/products/infrastucture"
+	"introduccion_go/src/products/infrastructure"
 	"net/http"
 	"strconv"
 

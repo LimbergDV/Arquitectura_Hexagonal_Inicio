@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"introduccion_go/src/products/application"
 	"introduccion_go/src/products/domain"
-	infraestructure "introduccion_go/src/products/infrastucture"
+	"introduccion_go/src/products/infrastructure"
 	"net/http"
 	"strconv"
 

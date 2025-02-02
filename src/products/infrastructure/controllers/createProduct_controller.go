@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"introduccion_go/src/products/application"
 	"introduccion_go/src/products/domain"
-	infraestructure "introduccion_go/src/products/infrastucture"
-	"introduccion_go/src/products/infrastucture/routes/validators"
+	"introduccion_go/src/products/infrastructure"
+
+	"introduccion_go/src/products/infrastructure/routes/validators"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

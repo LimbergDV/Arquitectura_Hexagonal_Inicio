@@ -2,9 +2,8 @@ package controllers
 
 import (
 	"introduccion_go/src/products/application"
-	infraestructure "introduccion_go/src/products/infrastucture"
+	infraestructure "introduccion_go/src/products/infrastructure"
 	"net/http"
-
 	"github.com/gin-gonic/gin"
 )
 

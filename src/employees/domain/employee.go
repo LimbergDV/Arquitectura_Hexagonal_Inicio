@@ -4,13 +4,13 @@ type Employee struct {
 	Id int32
 	First_name string
 	Last_name string
-	Age string
+	Age int32
 	Curp string
 	Phone_number string
 	Salary float32 
 }
 
-func NewEmployee(First_name string, Last_name string, Age string, Curp string, Phone_number string, Salary float32) *Employee{
+func NewEmployee(First_name string, Last_name string, Age int32, Curp string, Phone_number string, Salary float32) *Employee{
 	return &Employee{Id: 1, First_name: First_name, Last_name: Last_name, Age: Age, Curp:  Curp, Phone_number: Phone_number, Salary: Salary}
 }
 
@@ -38,11 +38,11 @@ func (e *Employee) SetLastName (Last_name string) {
 	e.Last_name = Last_name
 } 
 
-func (e *Employee) GetAge() string {
+func (e *Employee) GetAge() int32 {
 	return e.Age
 }
 
-func (e *Employee) SetAge (Age string) {
+func (e *Employee) SetAge (Age int32) {
 	e.Age = Age
 } 
 
